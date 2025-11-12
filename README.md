@@ -13,16 +13,11 @@ A comprehensive system for verifying whether a drone's planned waypoint mission 
 - **2D and 3D Support**: Handles both planar and altitude-aware flight paths (3D for extra credit)
 - **Multiple Conflict Scenarios**: Pre-built test scenarios including no-conflict, spatial conflict, temporal separation, and more
 - **Rich Visualizations**: 
-  - ✨ **Enhanced Static 2D/3D Plots**: Modern aesthetics with professional color schemes, improved typography, and polished styling
-  - 🎬 **Smooth Animations**: Enhanced animated trajectory playback with better visual effects
-  - 🖱️ **Interactive Plotly Visualizations**: Hover-enabled 2D plots with detailed information
-  - ⏱️ **4D Time-Slider Visualization**: Interactive 3D + time visualization with play/pause controls (extra credit)
-  - 🎮 **Interactive Dashboard**: Full-featured dashboard with status indicators, conflict tables, and manual controls
-  - 🎨 **Semantic Color Coding**: Intuitive colors (green=safe, yellow=warning, red=danger) with severity levels
-  - 📊 **Safety Buffer Visualization**: Clear conflict highlighting with gradient effects
-  - 🚦 **Real-time Status Indicators**: Visual feedback for mission clearance status
+  - Static 2D/3D trajectory plots with conflict highlights
+  - Animated trajectory playback
+  - Safety buffer visualization
 - **Comprehensive Testing**: Unit tests, integration tests, and automated test scenarios
-- **Easy-to-Use CLI**: Command-line interface with multiple visualization options
+- **Easy-to-Use CLI**: Command-line interface for quick checks
 - **Modular Architecture**: Clean separation of concerns for maintainability and extensibility
 
 ---
@@ -70,16 +65,7 @@ python -m src.cli --scenario multiple_conflicts --buffer 15.0
 python -m src.cli --scenario 3d_conflict --3d
 
 # Generate animation
-python -m src.cli --scenario spatial_conflict --animate
-
-# Generate interactive Plotly visualization (2D)
-python -m src.cli --scenario spatial_conflict --interactive
-
-# Generate 4D time-slider visualization (3D + time)
-python -m src.cli --scenario 3d_conflict --3d --time-slider
-
-# Generate interactive dashboard with manual controls
-python -m src.cli --scenario spatial_conflict --dashboard
+ python -m src.cli --scenario spatial_conflict --animate
 
 # Save visualization
 python -m src.cli --scenario spatial_conflict --output results.png
@@ -392,9 +378,9 @@ This project is created for educational purposes as part of the FlytBase Robotic
 
 ## 👨‍💻 Author
 
-**Your Name**  
+**Aditya Singh**  
 B.Tech Robotics Engineering  
-Submission Date: [DATE]
+Submission Date: 11/11/25
 
 ---
 

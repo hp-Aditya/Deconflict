@@ -7,7 +7,7 @@ import sys
 from typing import List
 from .data_models import Flight, Waypoint, save_flight_to_dict
 from .detector_enhanced import check_mission_high_accuracy, generate_conflict_report
-from .viz import plot_2d_trajectories, plot_3d_trajectories, animate_2d_trajectories, save_visualization
+from .viz import plot_2d_trajectories, plot_3d_trajectories, animate_2d_trajectories, animate_3d_trajectories, save_visualization
 from .example_scenarios import get_all_scenarios
 import matplotlib.pyplot as plt
 
@@ -141,7 +141,7 @@ def interactive_session():
         except ValueError:
             print("❌ Invalid!")
 
-    # Accuracy level
+    # Accuracy level - FIXED: removed leading space from '1' key
     print("\nSimulation accuracy:")
     print("  1. Standard (20 samples) - Fast")
     print("  2. High (50 samples) - Balanced")
@@ -150,7 +150,7 @@ def interactive_session():
     while True:
         acc = input("\nChoice (1-3, default 2): ").strip() or "2"
         if acc in ['1', '2', '3']:
-            samples = {' 1': 20, '2': 50, '3': 100}[acc]
+            samples = {'1': 20, '2': 50, '3': 100}[acc]  # FIXED: removed space before '1'
             break
         print("❌ Enter 1, 2, or 3")
 
@@ -213,17 +213,21 @@ def interactive_session():
         if save_file:
             save_visualization(fig, save_file)
 
-        if animate and not is_3d:
+        # ADDED: 3D animation support
+        if animate:
             print("Creating animation...")
-            anim = animate_2d_trajectories(primary, simulated, conflicts, buffer)
+            if is_3d:
+                anim = animate_3d_trajectories(primary, simulated, conflicts, buffer)
+            else:
+                anim = animate_2d_trajectories(primary, simulated, conflicts, buffer)
 
             if save_file:
                 anim_file = save_file.replace('.png', '.gif')
                 try:
                     anim.save(anim_file, writer='pillow', fps=20)
                     print(f"✓ Saved to {anim_file}")
-                except:
-                    print("⚠️  Animation save failed")
+                except Exception as e:
+                    print(f"⚠️  Animation save failed: {e}")
 
         plt.show()
 
@@ -284,7 +288,7 @@ def quick_scenario():
     buffer = float(input("Buffer (m, default 10): ") or "10")
     is_3d = primary.is_3d()
 
-    # Accuracy
+    # Accuracy - FIXED: removed leading space
     print("\nAccuracy: 1=Fast, 2=Balanced, 3=Ultra")
     acc = input("Choice (default 2): ").strip() or "2"
     samples = {'1': 20, '2': 50, '3': 100}.get(acc, 50)
@@ -298,13 +302,17 @@ def quick_scenario():
 
     print(f"\n{generate_conflict_report(conflicts)}")
 
+    # Create visualization
     if is_3d:
         fig, _ = plot_3d_trajectories(primary, simulated, conflicts, buffer)
+        if animate:
+            print("Creating 3D animation...")
+            anim = animate_3d_trajectories(primary, simulated, conflicts, buffer)
     else:
         fig, _ = plot_2d_trajectories(primary, simulated, conflicts, buffer)
-
         if animate:
-            animate_2d_trajectories(primary, simulated, conflicts, buffer)
+            print("Creating 2D animation...")
+            anim = animate_2d_trajectories(primary, simulated, conflicts, buffer)
 
     plt.show()
     return is_clear
